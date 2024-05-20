@@ -83,7 +83,7 @@ void menu()
 void inicializar()
 {
 
-	// provisÛrio porque n„o libera a memoria usada pela arvore
+	// provis√≥rio porque n√£o libera a memoria usada pela arvore
 	raiz = NULL;
 
 	cout << "Arvore inicializada \n";
@@ -239,47 +239,94 @@ NO* buscarElementoArvoreComPai(NO* no, int valor, NO*& pai)
 
 
 void removerElementoArvore(NO* no, int valor) {
-	NO* pai = NULL;
-	NO* atual = buscarElementoArvoreComPai(no, valor, pai);
-	if (atual == NULL) {
+	if (no == NULL) 
+	{
 		cout << "Elemento nao encontrado \n";
 		return;
 	}
 
+	//Buscar Elemento arvore.
+	NO* atual = no;
+	NO* pai = NULL;
 
-	// caso 1: sem filhos	
+	while(atual != NULL && atual->valor != valor)
+	{
+
+		pai = atual;
+		if(valor < atual->valor)
+		{
+			atual = atual->esq;
+		}
+		else
+		{
+			atual = atual->dir;
+		}
+			
+	}
+
+	//Tem na arvore ou Nao.
+	if(atual == NULL)
+	{
+		cout << "Nao tem \n";
+
+		return;
+	}
+
+	// Caso
+	NO* filho;
+
+	if(atual->esq != NULL)
+	{
+		filho = atual->esq;
+	}
+	else
+	{
+		filho = atual->dir;
+	}
 	
+	if(filho == NULL)
+	{
+		if(pai == NULL)
+		{
+			raiz = NULL;
+		}
+		else if(pai->dir == atual)
+		{
+			pai->dir = NULL;
+		}
+		else
+		{
+			pai->esq = NULL;
+		}
 
-	// caso 2: um filho	
-	
+		free(atual);
 
-	// caso 3: dois filhos
+		return;
+	}
 
-	// procura o elmento mais a esquerda da sub-arvore da direita
+	/////////////////////////// Caso 2
 	NO* sucessor = atual->dir;
-	NO* paiSucessor = atual;
-	while (sucessor->esq != NULL) {
-		paiSucessor = sucessor;
+	pai = atual;
+
+	while (sucessor->esq != NULL)
+	{
+		pai = sucessor;
 		sucessor = sucessor->esq;
 	}
 
-	// copia o valor do sucessor para o no atual
 	atual->valor = sucessor->valor;
 
-	// se existir uma sub-arvore a direita do sucessor , entao
-	// ela deve ser ligada ao pai do sucessor
-	if (sucessor->dir != NULL)
+	//Atualiza
+	if (pai->esq == sucessor)
 	{
-		paiSucessor->esq = sucessor->dir;
+		pai->esq = sucessor->dir;
 	}
-	else {
-		paiSucessor->esq = NULL;
+	else
+	{
+		pai->dir = sucessor->dir;
 	}
 
-	//libera memoria
 	free(sucessor);
-
-
 }
 
 
