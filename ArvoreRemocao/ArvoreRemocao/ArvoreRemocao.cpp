@@ -249,7 +249,7 @@ void removerElementoArvore(NO* no, int valor) {
 	NO* atual = no;
 	NO* pai = NULL;
 
-	while(atual != NULL && atual->valor != valor)
+	while(atual->valor != valor)
 	{
 
 		pai = atual;
